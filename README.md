@@ -12,6 +12,8 @@ whilst the request is running we temporarily disabled the Button with
 the promise chain or when an exception has occured.
 
 ```qml
+import "appstudio-qml-requests"
+
 Button {
     text: qsTr("Query")
     onClicked: {
