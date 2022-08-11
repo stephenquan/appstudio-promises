@@ -120,7 +120,7 @@ Item {
                     url: url,
                     options: options,
                     response: responseJson,
-                    responseText: responseText;
+                    responseText: responseText
                 };
 
                 resolve(obj);
