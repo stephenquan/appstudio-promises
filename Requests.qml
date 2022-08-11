@@ -115,14 +115,12 @@ Item {
                     }
                 }
 
-                console.log(`${id} done`);
                 resolve(_networkRequest);
                 Qt.callLater(destroy);
             }
 
             function init() {
                 id = ++internal.requestSequence;
-                console.log(`${id} init`);
 
                 let keys = [
                         "method",
