@@ -115,7 +115,16 @@ Item {
                     }
                 }
 
-                resolve(_networkRequest);
+                let obj = {
+                    method: method,
+                    url: url,
+                    options: options,
+                    response: responseJson,
+                    responseText: responseText;
+                };
+
+                resolve(obj);
+
                 Qt.callLater(destroy);
             }
 
