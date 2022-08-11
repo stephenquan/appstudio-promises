@@ -25,8 +25,7 @@ Button {
                         "body": {
                             "f": "pjson"
                         }
-                    }
-                    )
+                    } )
         .then( function (restRequest) {
             console.log(JSON.stringify(restRequest.response));
             // qml: {"currentVersion":"10.2"}
