@@ -14,11 +14,12 @@ the promise chain or when an exception has occured.
 ```qml
 import "appstudio-qml-requests"
 
-Button {
-    text: qsTr("Query")
-    onClicked: {
-        enabled = false;
-        Requests.request(
+Page {
+    Button {
+        text: qsTr("Query")
+        onClicked: {
+            enabled = false;
+            Requests.request(
                     "https://www.arcgis.com/sharing/rest",
                     {
                         "method": "GET",
@@ -26,10 +27,10 @@ Button {
                             "f": "pjson"
                         }
                     } )
-        .then( function (restRequest) {
-            console.log(JSON.stringify(restRequest.response));
-            // qml: {"currentVersion":"10.2"}
-            return Requests.request(
+            .then( function (restRequest) {
+                console.log(JSON.stringify(restRequest.response));
+                // qml: {"currentVersion":"10.2"}
+                return Requests.request(
                         "https://www.arcgis.com/sharing/rest/info",
                         {
                             "method": "POST",
@@ -37,18 +38,19 @@ Button {
                                 "f": "pjson"
                             }
                         } )
-        } )
-        .then( function (selfRequest) {
-            enabled = true;
-            console.log(JSON.stringify(selfRequest.response));
-            // qml: {"owningSystemUrl":"https://www.arcgis.com","authInfo":{"tokenServicesUrl":"https://www.arcgis.com/sharing/rest/generateToken","isTokenBasedSecurity":true}}
-        } )
-        .catch( function (err) {
-            enabled = false;
-            console.error(err.message, err.stack);
-            throw err;
-        } )
-        ;
+            } )
+            .then( function (selfRequest) {
+                enabled = true;
+                console.log(JSON.stringify(selfRequest.response));
+                // qml: {"owningSystemUrl":"https://www.arcgis.com","authInfo":{"tokenServicesUrl":"https://www.arcgis.com/sharing/rest/generateToken","isTokenBasedSecurity":true}}
+            } )
+            .catch( function (err) {
+                enabled = false;
+                console.error(err.message, err.stack);
+                throw err;
+            } )
+            ;
+        }
     }
 }
 ```
