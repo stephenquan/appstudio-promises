@@ -7,7 +7,7 @@ It wraps AppStudio's NetworkRequest with a JavaScript promise.
 
 In the following example we use Requests.request() with JavaScript promise
 chaining to issue two consective NetworkRequest together. We also see that
-whilst the request is button we temporarily disabled the Button with
+whilst the request is running we temporarily disabled the Button with
 `enabled = false` and restore it with `enable = true` at the end of
 the promise chain or when an exception has occured.
 
