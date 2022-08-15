@@ -3,9 +3,14 @@ import QtQuick 2.12
 import ArcGIS.AppFramework 1.0
 
 Item {
+    function userBreak() {
+        internal.userBreakTime = Date.now();
+    }
+
     QtObject {
         id: internal
         property int requestSequence: 0
+        property double userBreakTime: 0
     }
 
     // url
@@ -74,9 +79,16 @@ Item {
             property var resolve: null
             property var reject: null
             property var responseJson: null
+            property double startTime: Date.now()
+            property bool aborting: internal.userBreakTime > startTime
+            property bool aborted: false
 
             onReadyStateChanged: {
                 if (readyState !== NetworkRequest.ReadyStateComplete) {
+                    return;
+                }
+
+                if (aborted) {
                     return;
                 }
 
@@ -126,6 +138,19 @@ Item {
                 resolve(obj);
 
                 Qt.callLater(destroy);
+            }
+
+            onAbortingChanged: {
+                if (aborting) {
+                    if (readyState === NetworkRequest.ReadyStateProcessing
+                        || readyState === NetworkRequest.ReadyStateSending)
+                    {
+                        abort();
+                        aborted = true;
+                        reject(new Error("User abort"));
+                        Qt.callLater(destroy);
+                    }
+                }
             }
 
             function init() {
