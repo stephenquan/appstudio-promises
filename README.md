@@ -3,58 +3,46 @@ Implements Promises wrapper for AppStudio QML components
 
 It wraps AppStudio's NetworkRequest with a JavaScript promise.
 
- - appStudioPromises.networkRequest(properties)
-
-In the following example we use AppStudioPromises.networkRequest() with
-JavaScript promise chaining to issue two consective NetworkRequest together.
-We also see that whilst the request is running we temporarily disabled the
-Button with `enabled = false` and restore it with `enable = true` at the end
-of the promise chain or when an exception has occured.
+In the following example we combine NetworkRequestPromiseComponent with
+the Qt5 QML Promise library https://github.com/stephenquan/qt5-qml-promises
+to implement async function with await as generate function with yield
+to iterate results from an ArcGIS Online Search.
 
 ```qml
 import "appstudio-promises"
+import "qt5-qml-promises"
 
 Page {
     Button {
-        text: qsTr("Query")
+        text: qsTr("Search")
         onClicked: {
-            enabled = false;
-            appStudioPromises.networkRequest(
-                    {
-                        "url": "https://www.arcgis.com/sharing/rest",
-                        "method": "GET",
+            qmlPromises.asyncToGenerator( function * () {
+                let portalUrl = "https://www.arcgis.com";
+                let q = "type:native application";
+                let start = 1;
+                let num = 100;
+                while (start >= 1) {
+                    let search = yield qmlPromises.invoke(networkRequestComponent, {
+                        "url": `${portalUrl}/sharing/rest/search`,
                         "body": {
-                            "f": "pjson"
+                            "q": q,
+                            "start": start ?? 1,
+                            "num": num ?? 10,
+                            "f": "pjson",
                         }
-                    } )
-            .then( function (restRequest) {
-                console.log(JSON.stringify(restRequest.response));
-                // qml: {"currentVersion":"10.2"}
-                return appStudioPromises.networkRequest(
-                        {
-                            "url": "https://www.arcgis.com/sharing/rest/info",
-                            "method": "POST",
-                            "body": {
-                                "f": "pjson"
-                            }
-                        } )
-            } )
-            .then( function (selfRequest) {
-                enabled = true;
-                console.log(JSON.stringify(selfRequest.response));
-                // qml: {"owningSystemUrl":"https://www.arcgis.com","authInfo":{"tokenServicesUrl":"https://www.arcgis.com/sharing/rest/generateToken","isTokenBasedSecurity":true}}
-            } )
-            .catch( function (err) {
-                enabled = false;
-                console.error(err.message, err.stack);
-                throw err;
-            } )
-            ;
+                    } );
+                    let results = search.response.results;
+                    let nextStart = search.response.nextStart;
+                    console.log("start:", start, "nextStart: ", nextStart, "results: ", results.length);
+                    if (nextStart === -1) { break; }
+                    start = nextStart;
+                }
+            } )();
         }
     }
     
-    AppStudioPromises {
-        id: appStudioPromises
+    NetworkRequestPromiseComponent {
+        id: networkRequestComponent
     }
 }
 ```
