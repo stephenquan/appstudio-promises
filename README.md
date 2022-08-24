@@ -18,6 +18,7 @@ Page {
     Button {
         text: qsTr("Search")
         onClicked: {
+            qmlPromises.userAbort();
             qmlPromises.asyncToGenerator( function * () {
                 let portalUrl = "https://www.arcgis.com";
                 let q = "type:native application";
