@@ -23,6 +23,7 @@ Page {
                 let start = 1;
                 while (start >= 1) {
                     let search = yield qmlPromises.invoke(networkRequestComponent, {
+                        "method": "GET",
                         "url": `https://www.arcgis.com/sharing/rest/search`,
                         "body": {
                             "q": "type:native application",
