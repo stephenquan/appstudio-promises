@@ -1,27 +1,27 @@
-# appstudio-qml-requests
-Implements Requests singleton QML component.
+# appstudio-promises
+Implements Promises wrapper for AppStudio QML components
 
 It wraps AppStudio's NetworkRequest with a JavaScript promise.
 
- - Requests.request(url, options)
+ - appStudioPromises.networkRequest(properties)
 
-In the following example we use Requests.request() with JavaScript promise
-chaining to issue two consective NetworkRequest together. We also see that
-whilst the request is running we temporarily disabled the Button with
-`enabled = false` and restore it with `enable = true` at the end of
-the promise chain or when an exception has occured.
+In the following example we use AppStudioPromises.networkRequest() with
+JavaScript promise chaining to issue two consective NetworkRequest together.
+We also see that whilst the request is running we temporarily disabled the
+Button with `enabled = false` and restore it with `enable = true` at the end
+of the promise chain or when an exception has occured.
 
 ```qml
-import "appstudio-qml-requests"
+import "appstudio-promises"
 
 Page {
     Button {
         text: qsTr("Query")
         onClicked: {
             enabled = false;
-            Requests.request(
-                    "https://www.arcgis.com/sharing/rest",
+            appStudioPromises.networkRequest(
                     {
+                        "url": "https://www.arcgis.com/sharing/rest",
                         "method": "GET",
                         "body": {
                             "f": "pjson"
@@ -30,9 +30,9 @@ Page {
             .then( function (restRequest) {
                 console.log(JSON.stringify(restRequest.response));
                 // qml: {"currentVersion":"10.2"}
-                return Requests.request(
-                        "https://www.arcgis.com/sharing/rest/info",
+                return appStudioPromises.networkRequest(
                         {
+                            "url": "https://www.arcgis.com/sharing/rest/info",
                             "method": "POST",
                             "body": {
                                 "f": "pjson"
@@ -52,14 +52,18 @@ Page {
             ;
         }
     }
+    
+    AppStudioPromises {
+        id: appStudioPromises
+    }
 }
 ```
 
 To use Requests singleton QML component in your project consider cloning this rep directly in your project:
 
-    git clone https://github.com/stephenquan/appstudio-qml-requests.git
+    git clone https://github.com/stephenquan/appstudio-promises.git
 
 or adding it as a submodule:
 
-    git submodule add https://github.com/stephenquan/appstudio-qml-requests appstudio-qml-requests
+    git submodule add https://github.com/stephenquan/appstudio-promises.git appstudio-promises
     git submodule update
