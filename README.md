@@ -13,6 +13,8 @@ import "appstudio-promises"
 import "qt5-qml-promises"
 
 Page {
+    id: page
+    
     Button {
         text: qsTr("Search")
         onClicked: {
@@ -39,6 +41,11 @@ Page {
                 }
             } )();
         }
+    }
+    
+    QMLPromises {
+        id: qmlPromises
+        owner: page
     }
     
     NetworkRequestPromiseComponent {
