@@ -28,7 +28,7 @@ Page {
                             "q": "type:native application",
                             "start": start,
                             "num": 100,
-                            "f": "pjson",
+                            "f": "pjson"
                         }
                     } );
                     console.log("start:", start, "results: ", search.response.results.length, "nextStart: ", search.response.nextStart);
