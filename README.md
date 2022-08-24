@@ -20,25 +20,20 @@ Page {
         onClicked: {
             qmlPromises.userAbort();
             qmlPromises.asyncToGenerator( function * () {
-                let portalUrl = "https://www.arcgis.com";
-                let q = "type:native application";
                 let start = 1;
-                let num = 100;
                 while (start >= 1) {
                     let search = yield qmlPromises.invoke(networkRequestComponent, {
-                        "url": `${portalUrl}/sharing/rest/search`,
+                        "url": `https://www.arcgis.com/sharing/rest/search`,
                         "body": {
-                            "q": q,
-                            "start": start ?? 1,
-                            "num": num ?? 10,
+                            "q": "type:native application",
+                            "start": start,
+                            "num": 100,
                             "f": "pjson",
                         }
                     } );
-                    let results = search.response.results;
-                    let nextStart = search.response.nextStart;
-                    console.log("start:", start, "nextStart: ", nextStart, "results: ", results.length);
-                    if (nextStart === -1) { break; }
-                    start = nextStart;
+                    console.log("start:", start, "results: ", search.response.results.length, "nextStart: ", search.response.nextStart);
+                    if (search.response.nextStart === -1) { break; }
+                    start = search.response.nextStart;
                 }
             } )();
         }
