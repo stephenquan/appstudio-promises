@@ -9,8 +9,8 @@ to implement async function with await as generate function with yield
 to iterate results from an ArcGIS Online Search.
 
 ```qml
-import "appstudio-promises"
 import "qt5-qml-promises"
+import "appstudio-promises"
 
 Page {
     id: page
