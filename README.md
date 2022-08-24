@@ -59,7 +59,7 @@ Page {
 }
 ```
 
-To use Requests singleton QML component in your project consider cloning this rep directly in your project:
+To use AppStudioPromises in your project consider cloning this rep directly in your project:
 
     git clone https://github.com/stephenquan/appstudio-promises.git
 
