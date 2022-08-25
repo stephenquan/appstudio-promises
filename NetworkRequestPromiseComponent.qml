@@ -9,12 +9,10 @@ Component {
 
         property var options: null
 
+        property var context
         property var resolve: null
         property var reject: null
-        property double startTime: Date.now()
-        property double userAbortTime: 0
-        property bool userAborting: userAbortTime > startTime
-        property bool userAborted: false
+        property bool contextAborting: context ? context.aborting : null
 
         property var body
         property var responseJson: null
@@ -24,7 +22,7 @@ Component {
                 return;
             }
 
-            if (userAborted) {
+            if (context && context.aborted) {
                 return;
             }
 
@@ -76,14 +74,15 @@ Component {
             Qt.callLater(destroy);
         }
 
-        onUserAbortingChanged: {
-            if (userAborting) {
+        onContextAbortingChanged: {
+            if (contextAborting) {
                 if (readyState === NetworkRequest.ReadyStateProcessing
                         || readyState === NetworkRequest.ReadyStateSending)
                 {
                     abort();
-                    userAborted = true;
-                    reject(new Error("User Abort"));
+                    //userAborted = true;
+                    //reject(new Error("User Abort"));
+                    context.finishAbort(reject);
                     Qt.callLater(destroy);
                 }
             }
